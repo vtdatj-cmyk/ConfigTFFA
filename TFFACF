@@ -1,0 +1,23 @@
+-- Giữ nguyên các require nội bộ để lấy dữ liệu chuẩn từ game
+local ConfigFolder = ReplicatedStorage:FindFirstChild("Config")
+local StandsConfig = safeRequire(ConfigFolder and ConfigFolder:FindFirstChild("StandsConfig"))
+local FenceConfig = safeRequire(ConfigFolder and ConfigFolder:FindFirstChild("FenceConfig"))
+local FoodsConfig = safeRequire(ConfigFolder and ConfigFolder:FindFirstChild("FoodsConfig"))
+local AnimalEconomy = safeRequire(ConfigFolder and ConfigFolder:FindFirstChild("AnimalEconomy"))
+local BalanceCurve = safeRequire(ReplicatedStorage:FindFirstChild("Shared") and ReplicatedStorage.Shared:FindFirstChild("BalanceCurve"))
+
+local AnimalsData = safeRequire(ReplicatedStorage:FindFirstChild("AnimalsData"))
+local NumberFormat = safeRequire(ReplicatedStorage:FindFirstChild("Shared") and ReplicatedStorage.Shared:FindFirstChild("NumberFormat"))
+local Mutations = safeRequire(ReplicatedStorage:FindFirstChild("Shared") and ReplicatedStorage.Shared:FindFirstChild("Mutations"))
+local AnimalUtil = safeRequire(ReryptedStorage:FindFirstChild("Shared") and ReplicatedStorage.Shared:FindFirstChild("AnimalUtil"))
+
+-- Sau đó load phần Best Pet từ GitHub của bạn và truyền các biến này vào:
+local BestPetManager = nil
+pcall(function()
+    local successBestPet, BestPetRemote = pcall(function()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/vtdatj-cmyk/BestPets/refs/heads/main/TFFA"))()
+    end)
+    if successBestPet and type(BestPetRemote) == "table" and BestPetRemote.Init then
+        BestPetManager = BestPetRemote.Init(Window, DataController, Mutations, AnimalUtil, RarityConfigRemote, MutationsConfigRemote, AnimalNamesMap, SavedConfig, saveConfigData, formatMoneySafe)
+    end
+end)
